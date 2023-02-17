@@ -1,25 +1,17 @@
 const express = require("express");
 const app = express();
+const FilterDate = require("./middleware/filterDate");
 app.set("view engine", "ejs");
+app.use(FilterDate);
 app.get("/", (req, res) => {
   const today = new Date();
-  const hour = today.getHours();
-  const day = today.getDay();
-  console.log(hour);
-  (day == "Monday" ||
-    day == "Tuesday" ||
-    day == "Wednesday" ||
-    day == "Thursday" ||
-    day == "Friday") &&
-  hour <= 17 &&
-  hour >= 9
-    ? res.render("homePage", { text: "world", today: today })
-    : res.send("Come back when we're open ");
+  res.render("homePage", { text: "world", today: today });
 });
 
 const servRouter = require("./routes/services");
 const homeRouter = require("./routes/homepage");
 const contactRouter = require("./routes/contact");
+const filterDate = require("./middleware/filterDate");
 app.use("/service", servRouter);
 app.use("/home", homeRouter);
 app.use("/contact", contactRouter);
